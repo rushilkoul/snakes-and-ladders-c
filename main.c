@@ -17,6 +17,7 @@ void printHorizontalSeparator()
 
 int player1 = 0;
 int player2 = 0;
+int gameEnded = 0;
 
 void printVerticalSeparators()
 {
@@ -116,18 +117,26 @@ void gameLogic(int chance)
         scanf("%c");
         int rolled = rollDie();
         printf("Player %d Rolled a ", chance);
-        printf(ANSI_COLOR_RED"%d\n"ANSI_COLOR_RESET,rolled);
+
+        if (rolled == 6)
+            printf(ANSI_COLOR_GREEN"%d\n"ANSI_COLOR_RESET,rolled);
+        else
+            printf(ANSI_COLOR_RED"%d\n"ANSI_COLOR_RESET,rolled);
     
         if(_player + rolled > 100)
         {
-            // cant move
+            printf(ANSI_COLOR_RED"Rolled more than 100. Try again.\n"ANSI_COLOR_RESET);
         }
         else
         {
             _player += rolled;
             if(_player == 100)
             {
-                // player won
+                gameEnded = 1;
+                printf(ANSI_COLOR_GREEN"Player %d WON THE GAME!!\n"ANSI_COLOR_RESET, chance);
+                setPlayerState(chance, _player);
+                printBoard();
+                break;
             }
             // snakes and ladders detection
         }
@@ -143,10 +152,9 @@ int main()
 {
     int chance = 1;
     
-
     srand(time(NULL)); //random seed
     printf("Welcome to Snakes and Ladders.\n");
-    while(1)
+    while(gameEnded == 0)
     {
         gameLogic(chance);
         if(chance == 1)
@@ -155,50 +163,5 @@ int main()
             chance = 1;
     }
     return 0;
-
-    // printf("-----------------------------\n");
-    // printf("WELCOME TO SNAKES AND LADDERS\n");
-    // printf("-----------------------------\n");
-    
-    // int dummy;
-    // int player1 = 0;
-    // int player2 = 0;
-    // int diceRoll;
-
-    // int chance = 0;
-
-    // int gameOver = 0;
-
-    // int snakes[3][2] = 
-    // {
-    //     {11,5}, {20,6}, {55,4}
-    // };
-    // while (gameOver != 1)
-    // {
-    //     printf("Player 1 Position: %d\tPlayer 2 Position: %d\n\n", player1, player2);
-    //     printf("\tPlayer %d's chance. Press enter to roll:", chance + 1);
-    //     getchar();
-    //     diceRoll = (rand() % 6) + 1;
-    //     printf("\nPlayer %d Rolled a %d\n\n", chance + 1, diceRoll);
-
-    //     if (chance == 0)
-    //     {
-    //         for (int i = 0; i <= sizeof(snakes) / sizeof(snakes[0]); i++)
-    //         {
-    //             if(player1 == snakes[i][0])
-    //             {
-    //                 printf("%d------\n", snakes[i][0]);
-    //             }
-    //         }
-    //         player1 += diceRoll;
-    //         chance = 1;
-    //     }
-    //     else 
-    //     {
-    //         player2 += diceRoll;
-    //         chance = 0;
-    //     }
-
-    // }
 
 }
